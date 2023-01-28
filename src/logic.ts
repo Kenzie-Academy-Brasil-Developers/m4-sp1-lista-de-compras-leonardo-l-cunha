@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { data } from "./dataBase";
-import { iBuyList, iId, ItemOrderKeys, ListOrderKeys } from "./interfaces";
+import { iBuyList, iId,  ListOrderKeys } from "./interfaces";
 
 let count = 1;
 
@@ -82,7 +82,7 @@ const uptadeList = (request: Request, response: Response): Response => {
   const list = data[findIndex].data[dataItem]
   
   if(typeof request.body.quantity === "number" || request.body.quantity === "number"){
-    return response.status(400).json({message: "nao pode numeros"})
+    return response.status(400).json({message: "the input can only string"})
   }
   
   if(!request.body.hasOwnProperty("quantity") || !request.body.hasOwnProperty("name")  ){

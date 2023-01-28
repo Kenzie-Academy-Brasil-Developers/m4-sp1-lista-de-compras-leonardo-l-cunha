@@ -12,5 +12,5 @@ interface iId extends iBuyList{
 }
 
 type ListOrderKeys = "listName" | "data"
-type ItemOrderKeys = "name" | "quantity"
-export {iData, iBuyList,iId,ListOrderKeys,ItemOrderKeys}
+
+export {iData, iBuyList,iId,ListOrderKeys}
