@@ -22,13 +22,13 @@ const verifyListOrder = (payload: any): iBuyList => {
 const createListOrder = (request: Request, response: Response): Response => {
   try {
     const newData: iBuyList = verifyListOrder(request.body);
-    const id: number = count++;
+    const id: number = count;
 
     const newDataComplete: iId = {
       id: id,
       ...newData,
     };
-    data.push(newDataComplete);
+    
 
     if (parseInt(newDataComplete.listName)) {
       return response.status(400).json({
@@ -47,7 +47,8 @@ const createListOrder = (request: Request, response: Response): Response => {
         message: `U cannot add :${Array.from(extraKeys)} `,
       });
     }
-
+    count++
+    data.push(newDataComplete);
     return response.status(201).json(newDataComplete);
   } catch (error) {
     if (error instanceof Error) {
@@ -62,50 +63,24 @@ const createListOrder = (request: Request, response: Response): Response => {
   }
 };
 
+const readAllList  =  (request: Request, response: Response): Response => {
+  return response.json(data)
+}
+
 const readUnikList = (request: Request, response: Response): Response => {
-  const id: number = parseInt(request.params.id);
+  const findId:number = request.idList.findId
 
-  const findIndex = data.findIndex((ele) => ele.id === id);
-
-  if (findIndex === -1) {
-    return response.status(404).json({
-      message: "List not found!",
-    });
-  }
-
-  return response.status(200).json(data[findIndex]);
+  return response.status(200).json(data[findId]);
 };
 
 const uptadeList = (request: Request, response: Response): Response => {
-  const id: number = parseInt(request.params.id)
-  const name: string = request.params.listName
-  
-
-  const findIndex = data.findIndex((ele) => ele.id === id);
-
-  if (findIndex === -1) {
-    return response.status(404).json({
-      message: "not found!",
-    });
-  }
-
-  const dataItem = data[findIndex].data.findIndex((ele => ele.name === name))
- 
-  if (dataItem === -1) {
-    return response.status(404).json({
-      message: "Item not found!"
-    })
-  }
-
+  const findIndex = request.listOrder.findIndex
+  const dataItem = request.listOrder.dataItem
   
   
   
   const list = data[findIndex].data[dataItem]
   
-  
-
-
-
   if(typeof request.body.quantity === "number" || request.body.quantity === "number"){
     return response.status(400).json({message: "nao pode numeros"})
   }
@@ -123,23 +98,8 @@ const uptadeList = (request: Request, response: Response): Response => {
 }
 
 const removeAListItem = (request: Request, response: Response): Response => {
-  const id: number = parseInt(request.params.id)
-  const name: string = request.params.listName
-
-  const findIndex = data.findIndex((ele) => ele.id === id);
-
-  if (findIndex === -1) {
-    return response.status(404).json({
-      message: "not found!",
-    });
-  }
-  const dataItem = data[findIndex].data.findIndex((ele => ele.name === name))
-  console.log(dataItem)
-  if (dataItem === -1) {
-    return response.status(404).json({
-      message: "Item not found!"
-    })
-  }
+  const findIndex = request.listOrder.findIndex
+  const dataItem = request.listOrder.dataItem
 
 
   data[findIndex].data.splice(dataItem, 1)
@@ -148,19 +108,11 @@ const removeAListItem = (request: Request, response: Response): Response => {
 };
 
 const deleteList = (request: Request, response: Response): Response => {
-  const id: number = parseInt(request.params.id)
+  const findId:number = request.idList.findId
 
-  const findIndex = data.findIndex((ele) => ele.id === id);
-
-  if (findIndex === -1) {
-    return response.status(404).json({
-      message: "List not found!",
-    });
-  }
-
-  data.splice(findIndex, 1)
+  data.splice(findId, 1)
 
   return response.status(204).send()
 }
 
-export { createListOrder, readUnikList, removeAListItem, deleteList, uptadeList };
+export { createListOrder, readAllList ,readUnikList, removeAListItem, deleteList, uptadeList };

@@ -1,6 +1,7 @@
 import express, { Application, Request, Response } from "express";
 import { data } from "./dataBase";
-import { createListOrder, deleteList, readUnikList, removeAListItem, uptadeList } from "./logic";
+import { createListOrder, deleteList, readAllList, readUnikList, removeAListItem, uptadeList } from "./logic";
+import { ensureListOrdeExist, unikEnsureId } from "./middlewares";
 
 const app: Application = express()
 app.use(express.json())
@@ -8,16 +9,15 @@ app.use(express.json())
 
 app.post("/purchaseList", createListOrder )
 
-app.get("/purchaseList", (request: Request, response: Response): Response => {
-    return response.json(data)
-})
-app.get("/purchaseList/:id", readUnikList )
+app.get("/purchaseList",readAllList)
 
-app.patch("/purchaseList/:id/:listName",uptadeList)
+app.get("/purchaseList/:id", unikEnsureId, readUnikList )
 
-app.delete("/purchaseList/:id/:listName",removeAListItem)
+app.patch("/purchaseList/:id/:listName",ensureListOrdeExist,uptadeList)
 
-app.delete("/purchaseList/:id", deleteList)
+app.delete("/purchaseList/:id/:listName",ensureListOrdeExist,removeAListItem)
+
+app.delete("/purchaseList/:id",unikEnsureId, deleteList)
 
 app.listen(3000, () => {
     return console.log("App is running")
