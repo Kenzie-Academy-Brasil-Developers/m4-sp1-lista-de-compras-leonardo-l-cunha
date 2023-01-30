@@ -85,7 +85,7 @@ const uptadeList = (request: Request, response: Response): Response => {
   
  
   
-  if(typeof request.body.name === "number" || typeof request.body.quantity === "number"  ){
+  if(typeof request.body.name !== "string" || typeof request.body.quantity !== "string"  ){
     return response.status(400).json({message: "the input cannot be a number"})
   }
 
