@@ -83,13 +83,17 @@ const uptadeList = (request: Request, response: Response): Response => {
   
   const list = data[findIndex].data[dataItem]
   
-  if(typeof request.body.name === "number" || request.body.quantity === "number"){
+ 
+  
+  if(typeof request.body.name === "number" || typeof request.body.quantity === "number"  ){
     return response.status(400).json({message: "the input cannot be a number"})
   }
-  
+
   if(!request.body.hasOwnProperty("quantity") || !request.body.hasOwnProperty("name")  ){
     return response.status(400).json({message: "expect input name or quantity"})
   }
+
+
   
   
 
